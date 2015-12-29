@@ -1,0 +1,111 @@
+
+rotatesheet.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+rotate0
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate12
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate1
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate11
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate10
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+rotatesheet2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+rotate2
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate3
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate4
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate8
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+rotatesheet3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+rotate5
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate6
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+rotate7
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+rotatesheet4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+rotate9
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1

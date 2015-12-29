@@ -1,0 +1,111 @@
+
+drotatesheet.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+drotate0
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate12
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate1
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate10
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+drotatesheet2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+drotate11
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate2
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate3
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+drotatesheet3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+drotate4
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate5
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate6
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+
+drotatesheet4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+drotate7
+  rotate: false
+  xy: 2, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate8
+  rotate: false
+  xy: 260, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
+drotate9
+  rotate: false
+  xy: 518, 2
+  size: 256, 512
+  orig: 256, 512
+  offset: 0, 0
+  index: -1
