@@ -1,3 +1,10 @@
+/**
+	/com/me/mygdxgame/MyGdxGame.java
+	Author: Nic Wilson
+
+	The main game file that handles the game logic
+	Messy but effective!
+*/
 package com.me.mygdxgame;
 
 import java.util.ArrayList;
@@ -18,47 +25,83 @@ import com.badlogic.gdx.math.Vector2;
 import mtear.lib.GameBase;
 import mtear.lib.NBitmap;
 
+/**
+	Main game class
+	Extends LibGDX GameBase to be effective
+*/
 public class MyGdxGame extends GameBase{
-	final static int GAMEOVER1 = 0, GAMEOVER2 = 1, PLAY = 2, MENU = 3, RESETTING = 4, TUTORIAL = 5, SCOREVIEW = 6;
+
+	/**
+		Class variables
+	*/
+
+	// Game states
+	final static int GAMEOVER1 = 0, GAMEOVER2 = 1, PLAY = 2, MENU = 3,
+	 RESETTING = 4, TUTORIAL = 5, SCOREVIEW = 6;
 	static int GAMESTATE = 3;
 	
-	private NBitmap one, two, three, six, twelve, twentyfour, fourtyeight, ninetysix, n192, n384, n768, n1536, n3072, n6144;
-	private NBitmap sixp, twelvep, twentyfourp, fourtyeightp, ninetysixp, n192p, n384p, n768p, n1536p, n3072p, n6144p;
-	private NBitmap gboard, next1, next2, next3, next0, rotateanimation, drotateanimation;
-	private NBitmap onegrey, twogrey, treyimage, redcard, redcardgrey, nextorange;
+	//Image variables
+	private NBitmap one, two, three, six, twelve, twentyfour, fourtyeight,
+	 	ninetysix, n192, n384, n768, n1536, n3072, n6144;
+	private NBitmap sixp, twelvep, twentyfourp, fourtyeightp, ninetysixp, n192p,
+		 n384p, n768p, n1536p, n3072p, n6144p;
+	private NBitmap gboard, next1, next2, next3, next0, rotateanimation, 
+		drotateanimation;
+	private NBitmap onegrey, twogrey, treyimage, redcard, redcardgrey,
+		 nextorange;
+
+	NBitmap flysprite = null, helpicon, nosound,
+		 sound1, sound2, orangecard, trophy;
+
+	//Game board
 	private float[] gridx, gridy;
+
+	//General Purpose variables
 	BitmapFont genfont, genfont2, yhl;
-	Sound swipesound, alerttone, combinesound, newksound, scorechime,sound3000,sound6144;
+	Sound swipesound, alerttone, combinesound, newksound, 
+		scorechime,sound3000,sound6144;
 	Music bgmusic;
 	ArrayList<Point> rotatepoints = new ArrayList<Point>();
 	TextureAtlas rotateatlas, drotateatlas;
 	private int[][] gameboard = new int[4][4];
 	HashMap<Integer, NBitmap> imagemap = new HashMap<Integer, NBitmap>();
-	int nexttype = -1, hadthistype = 0, tempscore = 0, rotateframetimer=0, rotatecurrentframe = 0, flyx=0, flyy=0, flydir = 0,flytimer=0;
-	float offsetxstart = 0, offsetx = 0, offsetystart = 0, offsety = 0, flyposx=0, flyposy=0, flyxv=0,flyxv2=0,flyyv =0,flyyv2=0;
-	NBitmap flysprite = null, helpicon, nosound, sound1, sound2, orangecard, trophy;
+	int nexttype = -1, hadthistype = 0, tempscore = 0, rotateframetimer=0, 
+		rotatecurrentframe = 0, flyx=0, flyy=0, flydir = 0, flytimer=0,
+		flytotaltime=8, highestk=0,jumptimer=0, maxjump = 20, buzztimer = 0,
+		maxbuzz = 4, scoreslefttoanimate=0, animatescoretimer =0,
+		maxscoreframe=25, totalholdingscore = 0, swipeguardtimer=0,
+		zerocooldown = 0, tutorialtimer=0, tutorialswipes=3, currentmessage=0;
+	float offsetxstart = 0, offsetx = 0, offsetystart = 0, offsety = 0,
+		flyposx=0, flyposy=0, flyxv=0,flyxv2=0,flyyv =0,flyyv2=0;
 	boolean xswipe = true, swiping = false, alive = false, flyingin = false;
-	int flytotaltime = 8;
-	int highestk = 0;
 	boolean jumping = false, queuejump = false;
-	int jumptimer = 0, maxjump=20;
 	boolean isbuzzing = false, darkrotating = false;
-	int buzztimer = 0; int maxbuzz = 4;
 	boolean swipeguard = false;
-	int swipeguardtimer = 0;
-	float treyx=0, boardx=0, treyboardvx=0; int maxintroframes = 15, introanimtimer = 0, resettimer = 0; boolean duringintrotimer = false, resetting = false;
-	boolean scoreanimating = false, acceptanotherscore=false; float stextx = 0, stexty=0, stextvx = 0, stextvy = 0;
-	int scoreslefttoanimate=0, animatescoretimer =0,maxscoreframe=25, totalholdingscore = 0;
+	float treyx=0, boardx=0, treyboardvx=0; int maxintroframes = 15,
+		introanimtimer = 0, resettimer = 0; boolean duringintrotimer = false,
+		resetting = false;
+	boolean scoreanimating = false, acceptanotherscore=false; float stextx = 0,
+		stexty=0, stextvx = 0, stextvy = 0;
 	LinkedList<Point> scoreanimatepoints = new LinkedList<Point>();
-	int zerocooldown = 0, tutorialtimer=0, tutorialswipes=3, currentmessage=0;
-	String[] tutorialmessages = {"welcome to trey", "swipe to move tiles", "1 + 2 = 3", "3 + 3 = 6", "1 only combines with 2", "red tiles are wild", "orange and white make", "good luck"};
-	boolean pastcontrolledtutorial = false, completedtutorial=false, preparescoreview = false;
+	String[] tutorialmessages = {"welcome to trey", "swipe to move tiles",
+		"1 + 2 = 3", "3 + 3 = 6",
+		"1 only combines with 2", "red tiles are wild", "orange and white make",
+		 "good luck"};
+	boolean pastcontrolledtutorial = false, completedtutorial=false, 
+		preparescoreview = false;
 	int soundmode = 2, superpower = 0, scorestate = 0;
-	Preferences _savesettings;
-	String highestboardstring = "";
 	
+	//Save settings
+	Preferences _savesettings;
+	
+	//High Scores
+	String highestboardstring = "";
 	int[] highscores = new int[5];
 	
+	/**
+		init
+		Initialize the game
+	*/
 	@Override
 	public void init() {
 		//settings
@@ -69,13 +112,18 @@ public class MyGdxGame extends GameBase{
 			highscores[i] = _savesettings.getInteger("highscore"+i, 0);
 			System.out.println("Score " + i + ": " + highscores[i]);
 		}
-		highestboardstring = _savesettings.getString("highestboardstring", "-1;-1;-1;-1;~-1;-1;-1;-1;~-1;-1;-1;-1;~-1;-1;-1;-1;");
+		highestboardstring = _savesettings.getString("highestboardstring",
+			"-1;-1;-1;-1;~-1;-1;-1;-1;~-1;-1;-1;-1;~-1;-1;-1;-1;");
 		
+		//Set up game board
 		gameboard = clearBoard(gameboard);
-		float [] gx = {_W/8.5f, _W/8.5f+_W/4.97f, _W/8.5f+2*_W/4.97f, _W/8.5f+3*_W/4.97f}; gridx = gx;
-		float [] gy = {_H/6, _H/6+_H/6.6f, _H/6+2*_H/6.6f, _H/6+3*_H/6.6f}; gridy = gy;
+		float [] gx = {_W/8.5f, _W/8.5f+_W/4.97f, _W/8.5f+2*_W/4.97f,
+			 _W/8.5f+3*_W/4.97f}; gridx = gx;
+		float [] gy = {_H/6, _H/6+_H/6.6f, _H/6+2*_H/6.6f, _H/6+3*_H/6.6f};
+		gridy = gy;
 		this.setClearColor(1, 1, 1);
 		
+		//Ready images and fonts
 		readyImages();
 		genfont = new BitmapFont(Gdx.files.internal("data/gentext.fnt"),false);
 		genfont.setColor(new Color(200,200,200,1));
@@ -86,11 +134,13 @@ public class MyGdxGame extends GameBase{
 		yhl = new BitmapFont(Gdx.files.internal("data/yhl.fnt"),false);
 		yhl.setScale((((float)_W)*.0015f));
 		
+		//Animation constants
 		flyxv = ((_W/2-gboard.getWidth()/2)+one.getWidth())/flytotaltime;
 		flyxv2 = (_W-gridx[3])/flytotaltime;
 		flyyv = (gridy[0]+one.getHeight())/flytotaltime;
 		flyyv2 = (one.getHeight()-gridy[3])/flytotaltime;
 		
+		//Sounds
 		swipesound = Gdx.audio.newSound(Gdx.files.internal("data/swipe.mp3"));
 		alerttone = Gdx.audio.newSound(Gdx.files.internal("data/alerttone.mp3"));
 		combinesound = Gdx.audio.newSound(Gdx.files.internal("data/combine.mp3"));
@@ -99,49 +149,77 @@ public class MyGdxGame extends GameBase{
 		sound3000 = Gdx.audio.newSound(Gdx.files.internal("data/3000sound.mp3"));
 		sound6144 = Gdx.audio.newSound(Gdx.files.internal("data/6144sound.mp3"));
 		
+		//Music
 		bgmusic = Gdx.audio.newMusic(Gdx.files.internal("data/bgm.mp3"));
 		bgmusic.setLooping(true);
 		if(soundmode > 1)
 			bgmusic.play();
 	}
 	
+	/**
+		draw
+		Draw the game on the screen
+	*/
 	@Override
 	public void draw() {
-		if(soundmode == 0) nosound.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4, helpicon.getHeight()/4+nosound.getHeight()/5);
-		if(soundmode == 1) sound1.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4, helpicon.getHeight()/4+nosound.getHeight()/5);
-		if(soundmode == 2) sound2.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4, helpicon.getHeight()/4+nosound.getHeight()/5);
+		if(soundmode == 0)
+			nosound.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4,
+			helpicon.getHeight()/4+nosound.getHeight()/5);
+		if(soundmode == 1)
+			sound1.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4,
+			helpicon.getHeight()/4+nosound.getHeight()/5);
+		if(soundmode == 2)
+			sound2.drawAt(_W-nosound.getWidth()-helpicon.getWidth()/4,
+			helpicon.getHeight()/4+nosound.getHeight()/5);
 		
 		if(GAMESTATE == MENU || GAMESTATE == RESETTING){
-			treyimage.drawAt(_W/2-treyimage.getWidth()/2+treyx, _H-treyimage.getHeight()*1.25f);
+			treyimage.drawAt(_W/2-treyimage.getWidth()/2+treyx, _H-
+				treyimage.getHeight()*1.25f);
 			if(!duringintrotimer && !resetting){
-				genfont2.draw(_batch, "swipe to play", _W/2-genfont2.getBounds("swipe to play").width/2, _H/5);
+				genfont2.draw(_batch, "swipe to play", _W/2-
+					genfont2.getBounds("swipe to play").width/2, _H/5);
 			}
 			
 			if(duringintrotimer){
 				gboard.drawAt(boardx, _H/8);
 			}
 		}
-		if(GAMESTATE == MENU && GAMESTATE != RESETTING && GAMESTATE != PLAY && !duringintrotimer && completedtutorial){
+		if(GAMESTATE == MENU && GAMESTATE != RESETTING && GAMESTATE != PLAY && 
+			!duringintrotimer && completedtutorial){
 			helpicon.drawAt(helpicon.getWidth()/4, helpicon.getHeight()/4);
-			trophy.drawAt(_W/2-trophy.getWidth()/2,helpicon.getHeight()/4+nosound.getHeight()/5);
+			trophy.drawAt(_W/2-trophy.getWidth()/2,helpicon.getHeight()/4+
+				nosound.getHeight()/5);
 		}
 		
 		//draw bg
 		if(GAMESTATE <= PLAY || GAMESTATE == TUTORIAL || GAMESTATE == SCOREVIEW){
-			if(!preparescoreview && scorestate == 0 && !duringintrotimer)gboard.drawAt(_W/2-gboard.getWidth()/2, _H/8);
+			if(!preparescoreview && scorestate == 0 && 
+				!duringintrotimer)gboard.drawAt(_W/2-gboard.getWidth()/2, _H/8);
 			//Draw board
 			for(int i = 0; i < 4; i++){
 				for(int a = 0; a < 4; a++){
 					if(gameboard[i][a] >= 0){
-						NBitmap todraw = imagemap.get(gameboard[i][a] + ((getK(gameboard[i][a]) == highestk && highestk > 0)?10000:0));
-						if(gameboard[i][a] == 0 && superpower == 1)todraw = orangecard;
-						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==1 || GAMESTATE == SCOREVIEW && gameboard[i][a]==1)todraw=onegrey;
-						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==2 || GAMESTATE == SCOREVIEW && gameboard[i][a]==2)todraw=twogrey;
-						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==0)todraw=redcardgrey;
-						float drawx = gridx[i] + getDrawX(i,a), drawy = gridy[a] + getDrawY(i,a);
-						if(jumping && getK(gameboard[i][a]) == highestk)drawy += getjumpy();
+						NBitmap todraw = imagemap.get(gameboard[i][a]
+						 + ((getK(gameboard[i][a]) == 
+						 	highestk && highestk > 0)?10000:0));
+						if(gameboard[i][a] == 0 && superpower == 1)
+							todraw = orangecard;
+						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==1 || 
+							GAMESTATE == SCOREVIEW && gameboard[i][a]==1)
+							todraw=onegrey;
+						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==2 || 
+							GAMESTATE == SCOREVIEW && gameboard[i][a]==2)
+							todraw=twogrey;
+						if(GAMESTATE == GAMEOVER2 && gameboard[i][a]==0)
+							todraw=redcardgrey;
+						float drawx = gridx[i] + getDrawX(i,a), drawy = gridy[a]
+						 + getDrawY(i,a);
+						if(jumping && getK(gameboard[i][a]) == highestk)
+							drawy += getjumpy();
 						if(isbuzzing)drawx+=getbuzzx();
-						if(!isrotatingat(i,a) && !(i == flyx && a == flyy && flyingin) && !preparescoreview && scorestate == 0 && !duringintrotimer){
+						if(!isrotatingat(i,a) && !(i == flyx && a == flyy &&
+							flyingin) && !preparescoreview && scorestate == 0 &&
+							 !duringintrotimer){
 							todraw.drawAt(drawx, drawy);
 						}
 					}
@@ -150,10 +228,12 @@ public class MyGdxGame extends GameBase{
 			//drawrotation
 			for(Point p : rotatepoints){
 				if(!darkrotating){
-					rotateanimation.setRegion(rotateatlas.findRegion("rotate" + rotatecurrentframe));
+					rotateanimation.setRegion(rotateatlas.findRegion("rotate" + 
+						rotatecurrentframe));
 					rotateanimation.drawAt(gridx[p.x],gridy[p.y]);
 				}else{
-					drotateanimation.setRegion(drotateatlas.findRegion("drotate" + rotatecurrentframe));
+					drotateanimation.setRegion(drotateatlas.findRegion("drotate"
+					 + rotatecurrentframe));
 					drotateanimation.drawAt(gridx[p.x],gridy[p.y]);
 				}
 			}
@@ -165,54 +245,76 @@ public class MyGdxGame extends GameBase{
 			if(alive && GAMESTATE != TUTORIAL){
 				int ntn = 600+nexttype;
 				if(nexttype == 0 && superpower==1)ntn=610;
-				imagemap.get(ntn).drawAt(_W/2-next1.getWidth()/2, _H-next1.getHeight());
+				imagemap.get(ntn).drawAt(_W/2-next1.getWidth()/2,
+					_H-next1.getHeight());
 			}else{
 				if(GAMESTATE == GAMEOVER1){
-					genfont.draw(_batch, "Out of moves!", _W/2-genfont.getBounds("Out of moves!").width/2, 11*(_H/12));
-					genfont2.draw(_batch, "swipe", _W/2-genfont2.getBounds("swipe").width/2, _H/12);
+					genfont.draw(_batch, "Out of moves!", _W/2-
+						genfont.getBounds("Out of moves!").width/2, 11*(_H/12));
+					genfont2.draw(_batch, "swipe", _W/2-
+						genfont2.getBounds("swipe").width/2, _H/12);
 				}else if(GAMESTATE == GAMEOVER2){
 					genfont.setScale((((float)_W)*.002f));
-					genfont.draw(_batch, String.valueOf(totalholdingscore), _W/2-genfont.getBounds(String.valueOf(totalholdingscore)).width/2, 11*(_H/12));
+					genfont.draw(_batch, String.valueOf(totalholdingscore),
+						_W/2-genfont.getBounds(String.valueOf(
+							totalholdingscore)).width/2, 11*(_H/12));
 					genfont.setScale((((float)_W)*.001f));
-					genfont2.draw(_batch, "swipe", _W/2-genfont2.getBounds("swipe").width/2, _H/12);
+					genfont2.draw(_batch, "swipe", _W/2-
+						genfont2.getBounds("swipe").width/2, _H/12);
 				}
 			}
 			
 			//score
 			if(scoreanimating){
-				int nc = checkScore(gameboard[scoreanimatepoints.get(0).x][scoreanimatepoints.get(0).y]);
-				yhl.draw(_batch, "+"+String.valueOf(nc), stextx-yhl.getBounds("+"+String.valueOf(nc)).width/2, stexty-yhl.getBounds("+"+String.valueOf(nc)).height/2);
+				int nc = checkScore(g
+					ameboard[scoreanimatepoints.get(0).x][scoreanimatepoints.get(0).y]);
+				yhl.draw(_batch, "+"+String.valueOf(nc), 
+					stextx-yhl.getBounds("+"+String.valueOf(nc)).width/2,
+					stexty-yhl.getBounds("+"+String.valueOf(nc)).height/2);
 			}
 			//tutorial
 			if(GAMESTATE == TUTORIAL){
-				if(currentmessage == 0 || currentmessage == 1 || currentmessage == 4){
-					genfont2.draw(_batch, "swipe", _W/2-genfont2.getBounds("swipe").width/2, _H/12);
+				if(currentmessage == 0 || currentmessage == 1 || 
+					currentmessage == 4){
+					genfont2.draw(_batch, "swipe", _W/2-
+						genfont2.getBounds("swipe").width/2, _H/12);
 				}
 				if(currentmessage == 2){
-					genfont2.draw(_batch, "make a 3!", _W/2-genfont2.getBounds("make a 3!").width/2, _H/12);
+					genfont2.draw(_batch, "make a 3!", _W/2-
+						genfont2.getBounds("make a 3!").width/2, _H/12);
 				}
 				if(currentmessage == 3){
-					genfont2.draw(_batch, "make a 6!", _W/2-genfont2.getBounds("make a 6!").width/2, _H/12);
+					genfont2.draw(_batch, "make a 6!", _W/2-
+						genfont2.getBounds("make a 6!").width/2, _H/12);
 				}
 				if(currentmessage == 5){
-					genfont2.draw(_batch, "make a 12!", _W/2-genfont2.getBounds("make a 12!").width/2, _H/12);
+					genfont2.draw(_batch, "make a 12!", _W/2-
+						genfont2.getBounds("make a 12!").width/2, _H/12);
 				}
 				if(currentmessage == 6){
-					genfont2.draw(_batch, "make a 24!", _W/2-genfont2.getBounds("make a 24!").width/2, _H/12);
+					genfont2.draw(_batch, "make a 24!", _W/2-
+						genfont2.getBounds("make a 24!").width/2, _H/12);
 				}
 				if(currentmessage == 7){
-					genfont2.draw(_batch, "don't let your board get too full", _W/2-genfont2.getBounds("don't let your board get too full").width/2, _H/12);
+					genfont2.draw(_batch, "don't let your board get too full",
+					 _W/2-genfont2.getBounds("don't let your board get too full").width/2, _H/12);
 				}
 				float scale = genfont2.getScaleX();
 				if(currentmessage != 6){
 					genfont2.setScale((((float)_W)*.00105f));
 					if(currentmessage == 4)genfont2.setScale((((float)_W)*.001f));
-					genfont2.draw(_batch, tutorialmessages[currentmessage], _W/2-genfont2.getBounds(tutorialmessages[currentmessage]).width/2, 11*(_H/12));
+					genfont2.draw(_batch, tutorialmessages[currentmessage],
+					 _W/2-genfont2.getBounds(
+					 	tutorialmessages[currentmessage]).width/2, 11*(_H/12));
 					genfont2.setScale(scale);
 				}else if(currentmessage == 6){
 					genfont2.setScale((((float)_W)*.0008f));
-					genfont2.draw(_batch, tutorialmessages[6], _W/2-genfont2.getBounds(tutorialmessages[6]).width/2, 11*(_H/12));
-					genfont2.draw(_batch, "your highest number", _W/2-genfont2.getBounds("your highest number").width/2, 11*(_H/12)-genfont2.getBounds(tutorialmessages[6]).height-10);
+					genfont2.draw(_batch, tutorialmessages[6],
+						_W/2-genfont2.getBounds(tutorialmessages[6]).width/2,
+						11*(_H/12));
+					genfont2.draw(_batch, "your highest number",
+						_W/2-genfont2.getBounds("your highest number").width/2,
+						11*(_H/12)-genfont2.getBounds(tutorialmessages[6]).height-10);
 					genfont2.setScale(scale);
 				}
 			}
@@ -225,32 +327,49 @@ public class MyGdxGame extends GameBase{
 				}
 			}else{
 				if(scorestate == 0){
-					genfont2.draw(_batch, "swipe right to left to see more", _W/2-genfont2.getBounds("swipe right to left to see more").width/2, _H/12);
-					genfont2.draw(_batch, "your highest score", _W/2-genfont2.getBounds("your highest score").width/2, 24*(_H/25));
+					genfont2.draw(_batch, "swipe right to left to see more",
+						_W/2-genfont2.getBounds("swipe right to left to see more").width/2, _H/12);
+					genfont2.draw(_batch, "your highest score",
+						_W/2-genfont2.getBounds("your highest score").width/2, 24*(_H/25));
 					genfont.setScale((((float)_W)*.002f));
-					genfont.draw(_batch, String.valueOf(totalScore()), _W/2-genfont.getBounds(String.valueOf(totalScore())).width/2, 11*(_H/12));
+					genfont.draw(_batch, String.valueOf(totalScore()),
+						_W/2-genfont.getBounds(String.valueOf(totalScore())).width/2, 11*(_H/12));
 					genfont.setScale((((float)_W)*.001f));
 				}
 				if(scorestate == 1){
-					genfont2.draw(_batch, "swipe left to right to go back", _W/2-genfont2.getBounds("swipe left to right to go back").width/2, _H/12);
+					genfont2.draw(_batch, "swipe left to right to go back",
+						_W/2-genfont2.getBounds("swipe left to right to go back").width/2, _H/12);
 					genfont.setScale((((float)_W)*.002f));
-					genfont.draw(_batch, String.valueOf("scores"), _W/2-genfont.getBounds(String.valueOf("scores")).width/2, 11*(_H/12));
+					genfont.draw(_batch, String.valueOf("scores"),
+						_W/2-genfont.getBounds(String.valueOf("scores")).width/2,
+						 11*(_H/12));
 					genfont.setScale((((float)_W)*.001f));
-					genfont.draw(_batch, String.valueOf("1. " + highscores[0]), _W/8, 2*(_H/3));
-					genfont.draw(_batch, String.valueOf("2. " + highscores[1]), _W/8, 2*(_H/3)-1*_H/10);
-					genfont.draw(_batch, String.valueOf("3. " + highscores[2]), _W/8, 2*(_H/3)-2*_H/10);
-					genfont.draw(_batch, String.valueOf("4. " + highscores[3]), _W/8, 2*(_H/3)-3*_H/10);
-					genfont.draw(_batch, String.valueOf("5. " + highscores[4]), _W/8, 2*(_H/3)-4*_H/10);
+					genfont.draw(_batch, String.valueOf("1. " + highscores[0]),
+						_W/8, 2*(_H/3));
+					genfont.draw(_batch, String.valueOf("2. " + highscores[1]),
+						_W/8, 2*(_H/3)-1*_H/10);
+					genfont.draw(_batch, String.valueOf("3. " + highscores[2]),
+						_W/8, 2*(_H/3)-2*_H/10);
+					genfont.draw(_batch, String.valueOf("4. " + highscores[3]),
+						_W/8, 2*(_H/3)-3*_H/10);
+					genfont.draw(_batch, String.valueOf("5. " + highscores[4]),
+						_W/8, 2*(_H/3)-4*_H/10);
 				}
 				if(scorestate == 2){
 					genfont.setScale((((float)_W)*.002f));
-					genfont.draw(_batch, String.valueOf("credits"), _W/2-genfont.getBounds(String.valueOf("credits")).width/2, 11*(_H/12));
+					genfont.draw(_batch, String.valueOf("credits"), _W/2-
+						genfont.getBounds(String.valueOf("credits")).width/2, 11*(_H/12));
 					genfont.setScale((((float)_W)*.001f));
-					genfont.draw(_batch, String.valueOf("programming, art,"), _W/2-genfont.getBounds(String.valueOf("programming, art,")).width/2, 2*(_H/3));
-					genfont.draw(_batch, String.valueOf("and music by"), _W/2-genfont.getBounds(String.valueOf("and music by")).width/2, 2*(_H/3)-1*_H/15);
-					genfont.draw(_batch, String.valueOf("nic wilson"), _W/2-genfont.getBounds(String.valueOf("nic wilson")).width/2, 2*(_H/3)-2*_H/15);
-					genfont2.draw(_batch, String.valueOf("Mtear games on Facebook"), _W/2-genfont2.getBounds(String.valueOf("Mtear Games on Facebook")).width/2, 2*(_H/3)-4*_H/15);
-					genfont2.draw(_batch, String.valueOf("twitter.com/mteargames"), _W/2-genfont2.getBounds(String.valueOf("twitter.com/mteargames")).width/2, 2*(_H/3)-5*_H/15);
+					genfont.draw(_batch, String.valueOf("programming, art,"),
+						_W/2-genfont.getBounds(String.valueOf("programming, art,")).width/2, 2*(_H/3));
+					genfont.draw(_batch, String.valueOf("and music by"),
+						_W/2-genfont.getBounds(String.valueOf("and music by")).width/2, 2*(_H/3)-1*_H/15);
+					genfont.draw(_batch, String.valueOf("nic wilson"),
+						_W/2-genfont.getBounds(String.valueOf("nic wilson")).width/2, 2*(_H/3)-2*_H/15);
+					genfont2.draw(_batch, String.valueOf("Mtear games on Facebook"),
+						_W/2-genfont2.getBounds(String.valueOf("Mtear Games on Facebook")).width/2, 2*(_H/3)-4*_H/15);
+					genfont2.draw(_batch, String.valueOf("twitter.com/mteargames"),
+						_W/2-genfont2.getBounds(String.valueOf("twitter.com/mteargames")).width/2, 2*(_H/3)-5*_H/15);
 				}
 			}
 		}
